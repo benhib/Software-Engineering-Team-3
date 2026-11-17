@@ -1,6 +1,6 @@
 # Software Engineering Project – Team 3
 
-**DHBW Ravensburg** | Course: TSA/TSL 25 (Embedded Systems) | Lecturer: Prof. Dr. Christian Braunagel
+**DHBW Ravensburg** | TSA/TSL25 | Prof. Dr. Christian Braunagel
 
 ## Team Members
 * Ben Hibinger
