@@ -2,9 +2,13 @@
 
 ## Ben
 ### Gemini
-* Searching tools for online collaborative requirements making 
-* Create **LaTeX** template for requirements making
+| General Usage  | Artifact | Purpose of use | Review |
+| :------------- | -------- | -------------- | ------ |
+| Searching tools for online collaborative requirements making | Use of inscrive.io | Easier collaboration work and cleaner output files | - |
+| Create **LaTeX** template for requirements making | main.tex | Template to base requirements on | When doing requirements Engineering the entire template will get a workover |
 
 ## Julien
 ### Claude Code
-* Brainstorming: wrote `Part_I/Phase_1/first_ideas/ideas_julien.md` from Julien's own ideas (campus room plan with navigation, parking spot reporting). Claude only translated the ideas into English and formatted them like `ideas_ben.md`. Julien checked the file against the original ideas before committing.
+| General Usage  | Artifact | Purpose of use | Review |
+| :------------- | -------- | -------------- | ------ |
+| Translate own ideas (campus room plan with navigation, parking spot reporting) into English and format them like `ideas_ben.md` | ideas_julien.md | Brainstorming | Ideas are Julien's own, Claude only translated and formatted them. Julien checked the file against the original ideas before committing |
