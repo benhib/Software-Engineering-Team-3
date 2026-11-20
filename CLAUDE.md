@@ -55,17 +55,17 @@ Keep working material under `Part_I/Phase_<n>/` matching the phase numbering abo
 ## Branches
 
 - `main`: base, initial commit came from inscrive.io.
-- `inscrive`: synced with the inscrive.io online LaTeX editor the team uses. `Part_I/doc/Inception.tex` currently only exists here.
+- `inscrive`: written by the inscrive.io sync, not by hand. `Part_I/doc/Inception.tex` currently only exists here.
 - `brainstorming`: idea collection, README, task PDF, AI usage file.
 
 Single remote (`origin`, Ben's GitHub repo), no fork.
 
 ## LaTeX
 
-Build locally (TeX Live is installed):
+**Never edit `.tex` files locally.** All LaTeX is edited in the inscrive.io online editor and reaches the repo via inscrive's sync. Local edits would conflict with that sync. Read `.tex` files for context, and propose LaTeX changes as text for the user to paste into inscrive. If a local PDF preview is needed, build outside the repo so no aux files land in the working tree:
 
 ```
-latexmk -pdf main.tex
+latexmk -pdf -outdir=<dir outside repo> main.tex
 ```
 
 `main.tex` is an AI-generated (Gemini) LaTeX port of the IEEE SRS template. Project metadata is set once via `\projecttitle`, `\docauthor` etc. at the top. Custom macros:
