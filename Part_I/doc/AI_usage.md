@@ -19,3 +19,10 @@
 | :------------- | -------- | -------------- | ------ |
 | Create a context file for the AI assistant (task summary, deadlines, folder structure, AI usage rules) | CLAUDE.md | Improving documentation | Nikolai checked it against the task PDF and the repo, and corrected the LaTeX workflow (LaTeX is only edited in inscrive, never locally) |
 | Create an ignore file for macOS system files and LaTeX build artifacts | .gitignore | Repository setup | Verified with `git check-ignore` that the junk files are ignored and the task PDF is still tracked |
+
+## Niklas
+### Claude Code
+| General Usage | Artifact | Purpose of use | Review |
+| :--------------|----------|----------------|--------|
+| Explain the project task in German | – | Understanding the task | Niklas compared the explanation with the original PDF |
+| Suggest project ideas around the theme and the timetable, then simplify them and translate them into simple English | ideas_Niklas.md | Brainstorming | Claude suggested many ideas, Niklas chose the final three and rejected several others. Niklas checked the file before committing |
