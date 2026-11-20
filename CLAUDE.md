@@ -28,7 +28,7 @@ Part II (Q1 2027): architecture, design, implementation, verification, demo, bui
 
 ## AI usage must be recorded
 
-Every AI use goes into `Part_I/doc/AI_usage.md`, grouped by team member (`## <Name>`, then `### <Tool>`, then bullets). This applies to Claude Code too: when Claude does work here, add an entry under the member who ran the session.
+Every AI use goes into `Part_I/doc/AI_usage.md`, grouped by team member (`## <Name>`, then `### <Tool>`, then a table with the columns `General Usage | Artifact | Purpose of use | Review`). This applies to Claude Code too: when Claude does work here, add an entry under the member who ran the session.
 
 The task (section 2.9) requires each entry to state:
 

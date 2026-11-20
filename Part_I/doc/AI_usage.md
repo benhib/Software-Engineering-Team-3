@@ -12,3 +12,10 @@
 | General Usage  | Artifact | Purpose of use | Review |
 | :------------- | -------- | -------------- | ------ |
 | Translate own ideas (campus room plan with navigation, parking spot reporting) into English and format them like `ideas_ben.md` | ideas_julien.md | Brainstorming | Ideas are Julien's own, Claude only translated and formatted them. Julien checked the file against the original ideas before committing |
+
+## Nikolai
+### Claude Code
+| General Usage  | Artifact | Purpose of use | Review |
+| :------------- | -------- | -------------- | ------ |
+| Create a context file for the AI assistant (task summary, deadlines, folder structure, AI usage rules) | CLAUDE.md | Improving documentation | Nikolai checked it against the task PDF and the repo, and corrected the LaTeX workflow (LaTeX is only edited in inscrive, never locally) |
+| Create an ignore file for macOS system files and LaTeX build artifacts | .gitignore | Repository setup | Verified with `git check-ignore` that the junk files are ignored and the task PDF is still tracked |
