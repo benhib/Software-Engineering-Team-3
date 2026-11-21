@@ -34,4 +34,12 @@ Selected **DHBWay** due to the short and memerable name.
 
 
 ## Inception Document
-After the dicisions were made, we started working on the inception document.
+After the dicisions were made, we started working on the inception document. The Template was AI generated based of the given IEEE file.
+
+The inception document was made using `inscrive.io` since it allowed cooperative work.
+It has its own version control so only the final version was committed.
+Each group member took a section and worked on it.
+
+After each section was finished it was reviewed by everybody.
+
+When the `Inception.tex` was finished a PDF file was created and everybody reviewed it again.
