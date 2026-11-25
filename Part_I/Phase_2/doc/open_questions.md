@@ -12,6 +12,7 @@ If there is no history, should escalated questions get redirected to a different
 
 ## Language selection
 Is the language chosen only manually, or detected automatically?
+If manual, at the start with a popup menu (hello, what language?)?
 
 ## Information conflict
 How should conflicting information in different sources be handled?

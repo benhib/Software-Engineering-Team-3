@@ -6,6 +6,7 @@
 \usepackage[english]{babel}
 \usepackage{mathptmx} 
 \usepackage[scaled=0.92]{helvet} % Sans-Serif for title page
+\usepackage{float}
 
 % --- Layout ---
 \usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
@@ -196,48 +197,135 @@ This section specifies the external interfaces between \textbf{FYNDR AI} softwar
 \subsection{User Interfaces}
 
 
-EXT-UI-001 Direct user interface on website -> got this chat shown from team 2 (overlay above website)
+\req{EXT-UI-001}{Embedded Website Chat Overlay}{High}{
+The system shall provide a conversational chat interface embedded directly as an overlay widget on the official university website, allowing students to initiate and conduct chat sessions without leaving the current webpage (see Figure~\ref{fig:ui_chat_overlay}).
+}
 
-\includegraphics[width=0.98\linewidth]{given_UI_example.png}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.98\linewidth]{given_UI_example.png}
+    \caption{Conceptual UI example of the embedded FYNDR AI chat overlay on the university website.}
+    \label{fig:ui_chat_overlay}
+\end{figure}
 
-EXT-UI-002 Multiple device layout
-EXT-UI-003 Multiple language support
-EXT-UI-004 Feedback mechanism 
-EXT-UI-005 Escalated chat redirect request to user
-EXT-UI-006 Escalated chat window for university side to answer questions
-EXT-UI-007 Knowledge manager window
-EXT-UI-008 History (Open questions)?
-EXT-UI-009 Clickable reference for user
+\req{EXT-UI-002}{Responsive Multi-Device Layout}{High}{
+The user interface specified in \reqref{EXT-UI-001} shall automatically adapt its layout and interactive controls to desktop monitors, tablets, and mobile smartphone viewports.
+}
 
+\req{EXT-UI-003}{Multilingual Interface and Response Selection}{High}{
+The chat interface shall allow students to select their preferred interaction language and display both UI controls and generated answers in the chosen supported language.
+}
 
+\req{EXT-UI-004}{Clickable Source References}{High}{
+The chat interface shall display clickable hyperlinks or document references alongside generated answers so that users can directly open and verify the underlying approved university documents or external webpages.
+}
+
+\req{EXT-UI-005}{Answer Feedback Mechanism}{Medium}{
+The chat interface shall provide an interactive feedback control (e.g., positive/negative rating) on each bot response so that students can indicate whether an answer was helpful.
+}
+
+\req{EXT-UI-006}{User Escalation Request Interface}{High}{
+When the chatbot detects that a request cannot be answered reliably or requires official human assistance, the chat interface shall display an interactive option allowing the student to escalate the question to university staff (linked to \reqref{EXT-UI-007} and \reqref{EXT-COM-004}).
+}
+
+\req{EXT-UI-007}{University Staff Escalation Management UI}{High}{
+The system shall provide a dedicated web interface for authorized university staff to view, filter, and respond to escalated student inquiries (see Figure~\ref{fig:ui_questions}, linked to \reqref{EXT-SW-006} and \reqref{EXT-COM-005}).
+}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.98\linewidth]{mockup_UI_questions.png}
+    \caption{GUI mockup for university staff to manage and answer escalated student questions.}
+    \label{fig:ui_questions}
+\end{figure}
+
+\req{EXT-UI-008}{Knowledge Base Administration UI}{High}{
+The system shall provide an administrative web interface enabling authorized knowledge administrators to upload, update, remove, and whitelist approved university documents and external URLs (see Figure~\ref{fig:ui_manage}, linked to \reqref{EXT-SW-006} and \reqref{EXT-COM-006}).
+}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.98\linewidth]{mockup_UI_manage.png}
+    \caption{GUI mockup for knowledge administrators to manage approved documents and external sources.}
+    \label{fig:ui_manage}
+\end{figure}
+
+\req{EXT-UI-009}{Conversation History View}{Low}{
+The chat interface shall allow students to view previous messages within their session so they can revisit earlier guidance.
+}
+
+% ------------------------------------------------------------------------------
 \subsection{Hardware Interfaces}
 Because \textbf{FYNDR AI} is a web-based software application, it does not interface directly with custom physical hardware sensors or actuators. Instead, it relies on standard client and server hardware abstractions provided by the operating environment.
 
-EXT-HW-001 website works on device (phone, laptop, desktop, MACOS, etc.)
-EXT-HW-002 Server Hosting (local or cloud| open questions)?
+\req{EXT-HW-001}{Standard Client End-User Devices}{High}{
+The system shall operate on standard consumer computing hardware, including desktop computers, laptops, tablets, and smartphones equipped with standard input peripherals (keyboard, mouse, or touchscreen) and network connectivity, supporting the interface defined in \reqref{EXT-UI-001}.
+}
 
+\req{EXT-HW-002}{Server Hosting Environment}{Medium}{
+  --
+}
 
+% ------------------------------------------------------------------------------
 \subsection{Software Interfaces}
-This subsection specifies the interfaces between FYNDR AI and external software systems, browsers,
+This subsection specifies the interfaces between \textbf{FYNDR AI} and external software systems, browsers,
 databases, AI inference services, and authentication providers.
 
-EXT-SW-001 the website must embedd the chatbot
-EXT-SW-002 the chatbot must interface with an online search engine for whitelisted sources
-EXT-SW-003 the chatbot must interface with a local search engine for whitelisted sources
-EXT-SW-004 the chatbot must interface with an LLM 
-EXT-SW-005 the LLM the chatbot is connected with must be restricted harshly
-EXT-SW-006 the management options must be restricted to a login with university credentials
-EXT-SW-007 the chatbot must interface with a scraper/crawler to redirect the user directly to the information they want
+\req{EXT-SW-001}{University Website Host Integration}{High}{
+The chatbot frontend shall integrate into the existing university website without disrupting existing host page functionality, realizing \reqref{EXT-UI-001}.
+}
 
+\req{EXT-SW-002}{Approved External Web Content Retrieval Interface}{High}{
+The system shall interface with a controlled web indexing and retrieval component restricted exclusively to administrator-whitelisted external domains (enforcing \reqref{EXT-COM-003}).
+}
+
+\req{EXT-SW-003}{Internal Document Knowledge Base Interface}{High}{
+The system shall interface with an internal document storage and retrieval engine to index and query university-provided documents (e.g., PDF handbooks, regulations).
+}
+
+\req{EXT-SW-004}{Large Language Model (LLM) Interface}{High}{
+The system shall interface via a standardized API with a Large Language Model (LLM) service to synthesize natural-language responses in the user's selected language (\reqref{EXT-UI-003}) based strictly on retrieved context from \reqref{EXT-SW-002} and \reqref{EXT-SW-003}.
+}
+
+\req{EXT-SW-005}{LLM Output Grounding and Guardrail Interface}{High}{
+The interface to the LLM (\reqref{EXT-SW-004}) shall enforce strict system prompts and grounding constraints so that the model refuses to answer non university related questions or answering using unverified external knowledge and triggers the escalation workflow (\reqref{EXT-UI-006}) when confidence is insufficient.
+}
+
+\req{EXT-SW-006}{University Identity Provider Interface}{High}{
+The administrative and staff interfaces (\reqref{EXT-UI-007} and \reqref{EXT-UI-008}) shall interface with the university's existing authentication service to restrict access exclusively to authorized university personnel.
+}
+
+\req{EXT-SW-007}{Direct Link Extraction Interface}{Medium}{
+The content retrieval pipeline (\reqref{EXT-SW-002} and \reqref{EXT-SW-003}) shall extract exact source URLs and document section anchors to populate the clickable references displayed in \reqref{EXT-UI-004}.
+}
+
+% ------------------------------------------------------------------------------
 \subsection{Communications Interfaces}
-This subsection defines the network protocols, API formats, and external communication channels required by FYNDR AI.
+This subsection defines the network protocols, API formats, and external communication channels required by \textbf{FYNDR AI}.
 
-EXT-COM-001 Encryption?
-EXT-COM-002 Frontend - Backend communication
-EXT-COM-003 Restricted internet access
-EXT-COM-004 open/read to escalation chat
-EXT-COM-005 answer escalated questions
-EXT-COM-006 Connection to database with registered knowledge
+\req{EXT-COM-001}{Encrypted Transport Protocol}{High}{
+All external network communications between end-user browsers, administrative interfaces, and the \textbf{FYNDR AI} backend shall use encrypted to protect user queries and credentials.}
+}
+
+\req{EXT-COM-002}{Client-Server API Communication}{High}{
+The embedded chat widget (\reqref{EXT-UI-001}) and management interfaces (\reqref{EXT-UI-007}, \reqref{EXT-UI-008}) shall communicate with the backend server.
+}
+
+\req{EXT-COM-003}{Network Egress Allowlisting}{High}{
+Outbound internet communication from the \textbf{FYNDR AI} server shall be restricted at the network/application layer to an explicit allowlist of approved external domains, blocking unrestricted internet access.
+}
+
+\req{EXT-COM-004}{Escalation Transmission Channel}{High}{
+When a student initiates an escalation via \reqref{EXT-UI-006}, the system shall transmit the conversation context and user inquiry to the university staff queue (\reqref{EXT-UI-007}) in the foreseen chat \req{EXT-UI-007}.
+}
+
+\req{EXT-COM-005}{Escalation Response Delivery Channel}{High}{
+The system shall transmit responses submitted by university staff in \reqref{EXT-UI-007} back to the requesting student via the active chat session.
+}
+
+\req{EXT-COM-006}{Knowledge Repository Synchronization Protocol}{Medium}{
+The backend shall communicate with the persistent knowledge database (\reqref{EXT-SW-003}) over an authenticated internal network connection to read, index, and update approved documents and metadata.
+}
 
 % ------------------------------------------------------------------------------
 \section{System Features}
