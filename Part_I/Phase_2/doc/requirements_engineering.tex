@@ -33,7 +33,7 @@
 }
 
 % --- Metadata ---
-\newcommand{\projecttitle}{<Project Name>}
+\newcommand{\projecttitle}{FYNDR AI}
 \newcommand{\docversion}{Version 1.0 draft}
 \newcommand{\docauthor}{Nicken Labs \\ \vspace{0.5em} \\ Nikolai Schlosser, Julien Armbruster\\ Ben Hibinger, Niklas Reutter}
 \newcommand{\docorg}{DHBW Ravensburg -- Campus Friedrichshafen}
@@ -191,17 +191,50 @@
 \section{External Interface Requirements}
 % ------------------------------------------------------------------------------
 
+This section specifies the external interfaces between \textbf{FYNDR AI} software system and its users, hardware environments, external software components and communication networks.
+
 \subsection{User Interfaces}
-\guidance{Describe the logical characteristics of each interface between the software product and the users. You can reference UI mockups here.}
+
+
+EXT-UI-001 Direct user interface on website -> got this chat shown from team 2 (overlay above website)
+
+\includegraphics[width=0.98\linewidth]{given_UI_example.png}
+
+EXT-UI-002 Multiple device layout
+EXT-UI-003 Multiple language support
+EXT-UI-004 Feedback mechanism 
+EXT-UI-004 Escalated chat redirect request to user
+EXT-UI-005 Escalated chat window for university side to answer questions
+EXT-UI-006 Knowledge manager window
+EXT-UI-007 History (Open questions)?
+
 
 \subsection{Hardware Interfaces}
-\guidance{Describe the logical and physical characteristics of each interface between the software product and the hardware components of the system.}
+Because \textbf{FYNDR AI} is a web-based software application, it does not interface directly with custom physical hardware sensors or actuators. Instead, it relies on standard client and server hardware abstractions provided by the operating environment.
+
+EXT-HW-001 website works on device (phone, laptop, desktop, MACOS, etc.)
+EXT-HW-002 Server Hosting (local or cloud| open questions)?
+
 
 \subsection{Software Interfaces}
-\guidance{Describe the connections between this product and other specific software components (databases, operating systems, APIs, libraries).}
+This subsection specifies the interfaces between FYNDR AI and external software systems, browsers,
+databases, AI inference services, and authentication providers.
+
+EXT-SW-001 the website must embedd the chatbot
+EXT-SW-002 the chatbot must interface with an online search engine for whitelisted sources
+EXT-SW-003 the chatbot must interface with a local search engine for whitelisted sources
+EXT-SW-004 the chatbot must interface with an LLM 
+EXT-SW-005 the LLM the chatbot is connected with must be restricted harshly
+EXT-SW-006 the management options must be restricted to a login with university credentials
+EXT-SW-007 the chatbot must interface with a scraper/crawler to redirect the user directly to the information they want
 
 \subsection{Communications Interfaces}
-\guidance{Describe the requirements associated with any communications functions required by this product (e.g., HTTPS, REST APIs, WebSockets, email notifications).}
+This subsection defines the network protocols, API formats, and external communication channels required by FYNDR AI.
+
+EXT-COM-001 Encryption?
+EXT-COM-002 Frontend - Backend communication
+EXT-COM-003 Restricted internet access
+EXT-COM-004 open/read to escalation chat
 
 % ------------------------------------------------------------------------------
 \section{System Features}
