@@ -28,3 +28,4 @@
 | :--------------|----------|----------------|--------|
 | Explain the project task in German | – | Understanding the task | Niklas compared the explanation with the original PDF |
 | Suggest project ideas around the theme and the timetable, then simplify them and translate them into simple English | `ideas_Niklas.md` | Brainstorming | Claude suggested many ideas, Niklas chose the final three and rejected several others. Niklas checked the file before committing |
+| Help with wording of section 5 of the SRS | `requirements_engineering.tex` | Improving documentation | Niklas changed and extended the draft, numbers will be checked with Team 2 |
