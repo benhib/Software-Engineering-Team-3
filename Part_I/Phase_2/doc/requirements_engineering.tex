@@ -19,6 +19,9 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\textbf{}
 
 % --- Colors & hyperlinks ---
 \definecolor{linkblue}{RGB}{0, 51, 102}
@@ -120,12 +123,11 @@
     \hline
     \textbf{Name} & \textbf{Date} & \textbf{Reason For Changes} & \textbf{Version} \\
     \hline\hline
-    Ben - Gemini & 2026-11-17 & Template created from given document & 0.1 \\
+    Ben - Gemini & 2026-11-17 & Template created from given document & 0.1  \\
     \hline
-     & & & \\
+    Nikolai & 2026-11-27 & Sections 1 and 2 drafted, Appendix A and C extended & 0.2 \\
     \hline
-     & & & \\
-    \hline
+
 \end{tabularx}
 
 \newpage
@@ -141,52 +143,199 @@
 % ------------------------------------------------------------------------------
 
 \subsection{Purpose}
-\guidance{Identify the product whose software requirements are specified in this document, including the revision or release number. Describe the scope of the product that is covered by this SRS.}
+This Software Requirements Specification (SRS) describes the software requirements for \textbf{FYNDR AI}, release 1.0. FYNDR AI is a multilingual chatbot for the university website. It answers students' questions about university administration, student services and everyday student life.
+
+Nicken Labs (Team 3) wrote this SRS as the Requirements Engineering team for InterNex (Team 2). InterNex proposed the idea and acts as customer and domain expert. This includes the chat interface for students, the knowledge base, its administration and the escalation of questions to university staff. After validation by InterNex, this document is the baseline for architecture, design, implementation and testing.
 
 \subsection{Document Conventions}
-\guidance{Describe any standards or typographical conventions that were followed when writing this SRS. Example: Unique IDs are assigned using FR-XX for Functional Requirements and NFR-XX for Non-Functional Requirements. Priorities follow the MoSCoW or High/Medium/Low scheme.}
+This SRS follows the IEEE SRS template by Karl E. Wiegers, which is based on IEEE Std 830-1998. Each requirement is shown in a grey box with a unique ID, a short title and a priority. Requirement IDs in the text are links to the corresponding box. IDs are built as follows.
+
+\begin{tabularx}{\textwidth}{|p{3.6cm}|X|}
+    \hline
+    \textbf{ID} & \textbf{Meaning} \\
+    \hline\hline
+    EXT-\textit{IF}-\textit{nnn} & External interface requirement (Section 3). \textit{IF} is UI (user interface), HW (hardware), SW (software) or COM (communications). \\
+    \hline
+    FR-\textit{FEAT}-\textit{nnn} & Functional requirement (Section 4). \textit{FEAT} is a short code for the system feature. \\
+    \hline
+    NFR-\textit{CAT}-\textit{nnn} & Nonfunctional requirement (Section 5). \textit{CAT} is PERF (performance), SAFE (safety), SEC (security), QA (software quality attribute) or BR (business rule). \\
+    \hline
+    C-\textit{nn} & Design and implementation constraint (Section 2.5). \\
+    \hline
+    A-\textit{nn} & Assumption or dependency (Section 2.7). \\
+    \hline
+    TBD-\textit{nn} & Open point that still has to be clarified with the customer (Appendix C). \\
+    \hline
+\end{tabularx}
+
+Priorities have three levels. \textbf{High} requirements must be part of release 1.0, otherwise the release cannot be accepted. \textbf{Medium} requirements should be part of release 1.0 and are only postponed if the Part II schedule does not allow them. \textbf{Low} requirements are desirable and can follow in a later release. In requirement texts, \emph{shall} marks a binding requirement.
 
 \subsection{Intended Audience and Reading Suggestions}
-\guidance{Describe the different types of reader that the document is intended for, such as developers, project managers, users, testers, and documentation writers.}
+\begin{itemize}
+    \item \textbf{InterNex as customer} checks that their idea is represented correctly. Sections 1 and 2 give the overall picture, Sections 3 to 5 contain the requirements to validate and Appendix C lists the points that are still open.
+    \item \textbf{InterNex as developers} use the SRS in Part II as the baseline for architecture, design and implementation. Sections 2.5 and 2.7 name the constraints and assumptions that limit their design decisions.
+    \item \textbf{Testers} derive test cases from Sections 3 to 5. Each test case refers to the ID of the requirement it checks.
+\end{itemize}
 
 \subsection{Product Scope}
-\guidance{Provide a short description of the software being specified and its purpose, including relevant benefits, objectives, and goals.}
+Information about university administration, student services and campus life is spread across handbooks, PDF documents and webpages. Students often do not know which source is current or which office is responsible. International and exchange students, who are new to German procedures and university terms, are affected most. At the same time, university staff answer the same questions again and again.
+
+FYNDR AI lets students ask these questions in their own words and in a supported language. It answers from a controlled knowledge base of university documents and selected official websites and shows the sources it used. If it cannot answer a question reliably, the student can hand the question over to university staff.
+
+FYNDR AI has four goals.
+\begin{itemize}
+    \item Students find university information faster.
+    \item Students can check every answer against its original source.
+    \item University staff receive fewer repetitive enquiries and have more time for cases that need individual attention.
+    \item International and exchange students get easier access to information through answers in their language.
+\end{itemize}
+
+The following is \textbf{not} part of FYNDR AI.
+\begin{itemize}
+    \item Teaching course content or academic tutoring.
+    \item Binding legal, medical or official decisions (\reqref{NFR-SAFE-001}).
+    \item Searching the unrestricted internet (\reqref{NFR-BR-003}).
+    \item Changing data in other university systems, e.g.\ registering for exams or changing timetables. FYNDR AI only provides information and points to the responsible office.
+\end{itemize}
+
+The inception document describes the escalation route and the administrator dashboard as concepts. In line with Sections 3 and 5, this SRS treats both as part of release 1.0. Whether InterNex implements them completely in Part II is still open (TBD-01).
 
 \subsection{References}
-\guidance{List any other documents or Web addresses to which this SRS refers (e.g., Inception Document, DHBW Project Guidelines, IEEE Std 830-1998).}
-\begin{itemize}
-    \item Inception Document for \projecttitle, Version 1.0, 2026.
-    \item Prof. Dr. Christian Braunagel: \textit{Software Engineering -- Program Design Part I}, DHBW Ravensburg, Q4 2026.
-\end{itemize}
+\begin{enumerate}
+    \item InterNex (Team 2): \textit{FYNDR AI}, Inception Document, DHBW Ravensburg, November 2026.
+    \item Nicken Labs (Team 3): \textit{Initial Interview} with InterNex, 24 November 2026, \nolinkurl{Part_I/Phase_2/doc/initial_interview.md}.
+    \item Nicken Labs (Team 3): \textit{Open Questions} for InterNex, \nolinkurl{Part_I/Phase_2/doc/open_questions.md}.
+    \item C. Braunagel: \textit{Software Engineering -- Program Design Part I}, project description, TSA/TSL25, DHBW Ravensburg, Q4 2026.
+    \item C. Braunagel: \textit{Software Engineering, Section IV: Requirements Engineering}, lecture slides, DHBW Ravensburg, 2026.
+    \item K. E. Wiegers: \textit{Software Requirements Specification Template}, 1999.
+    \item IEEE Std 830-1998: \textit{IEEE Recommended Practice for Software Requirements Specifications}.
+    \item Regulation (EU) 2016/679, General Data Protection Regulation (GDPR).
+    \item Regulation (EU) 2024/1689, Artificial Intelligence Act, Article 50.
+    \item Directive (EU) 2016/2102 on the accessibility of the websites and mobile applications of public sector bodies, implemented in Baden-Württemberg by \S~10 L-BGG.
+\end{enumerate}
 
 % ------------------------------------------------------------------------------
 \section{Overall Description}
 % ------------------------------------------------------------------------------
 
 \subsection{Product Perspective}
-\guidance{Describe the context and origin of the product being specified in this SRS. Include a high-level context diagram if helpful.}
+FYNDR AI is a new, self-contained system. It does not replace or extend an existing product. InterNex proposed it in the Software Engineering project at DHBW Ravensburg and will develop it in Part II.
+
+Students use FYNDR AI through a chat widget on the university website (\reqref{EXT-UI-001}). University staff and knowledge administrators use separate web interfaces (\reqref{EXT-UI-007}, \reqref{EXT-UI-008}). Figure~\ref{fig:context} shows the system boundary and the actors and external systems that FYNDR AI exchanges data with.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        font=\small,
+        sys/.style={draw, very thick, rounded corners=3pt, fill=reqgray, minimum width=3.2cm, minimum height=6.6cm, align=center},
+        act/.style={draw, minimum width=3.0cm, minimum height=1cm, align=center},
+        ext/.style={draw, dashed, minimum width=3.5cm, minimum height=1cm, align=center},
+        flow/.style={-{Stealth[length=2mm]}},
+        both/.style={{Stealth[length=2mm]}-{Stealth[length=2mm]}},
+        lbl/.style={font=\footnotesize, align=center, inner sep=2pt}
+    ]
+        \node[sys] (fy) at (0,0) {\textbf{FYNDR AI}\\[6pt]chat backend\\knowledge base\\escalation queue};
+
+        \node[act] (st) at (-6.3, 2.2) {Student};
+        \node[act] (sf) at (-6.3, 0) {University Staff};
+        \node[act] (ad) at (-6.3,-2.2) {Knowledge\\Administrator};
+
+        \node[ext] (web) at (5.6, 2.7) {University Website};
+        \node[ext] (out) at (5.6, 0.9) {Approved External\\Websites};
+        \node[ext] (llm) at (5.6,-0.9) {Language Model\\Service};
+        \node[ext] (idp) at (5.6,-2.7) {University Identity\\Provider};
+
+        \draw[flow] ([yshift=5pt]st.east) -- ([yshift=5pt]st.east -| fy.west) node[lbl, midway, above] {questions, feedback};
+        \draw[flow] ([yshift=-5pt]st.east -| fy.west) -- ([yshift=-5pt]st.east) node[lbl, midway, below] {answers, sources};
+        \draw[flow] ([yshift=5pt]sf.east -| fy.west) -- ([yshift=5pt]sf.east) node[lbl, midway, above] {escalated questions};
+        \draw[flow] ([yshift=-5pt]sf.east) -- ([yshift=-5pt]sf.east -| fy.west) node[lbl, midway, below] {replies};
+        \draw[flow] (ad.east) -- (ad.east -| fy.west) node[lbl, midway, above] {documents, allowlist};
+
+        \draw[flow] (web.west -| fy.east) -- (web.west) node[lbl, midway, above] {chat widget};
+        \draw[flow] (out.west) -- (out.west -| fy.east) node[lbl, midway, above] {public pages};
+        \draw[both] (llm.west) -- (llm.west -| fy.east) node[lbl, midway, above] {context / text};
+        \draw[both] (idp.west) -- (idp.west -| fy.east) node[lbl, midway, above] {staff login};
+    \end{tikzpicture}
+    \caption{Context diagram of FYNDR AI. Solid boxes are human actors, dashed boxes are external systems.}
+    \label{fig:context}
+\end{figure}
+
+The university documents and the knowledge base are part of FYNDR AI. The university provides the documents, FYNDR AI stores and indexes them (\reqref{EXT-SW-003}). The external systems are
+\begin{itemize}
+    \item the \textbf{university website}, which hosts the chat widget (\reqref{EXT-SW-001}),
+    \item the \textbf{approved external websites}, which a knowledge administrator puts on the allowlist (\reqref{EXT-SW-002}, \reqref{EXT-COM-003}),
+    \item the \textbf{language model service}, which generates the answer text (\reqref{EXT-SW-004}, A-01),
+    \item the \textbf{university identity provider}, which authenticates staff and knowledge administrators (\reqref{EXT-SW-006}, A-04).
+\end{itemize}
 
 \subsection{Product Functions}
-\guidance{Summarize the major functions the product must perform or must let the user perform. Only a high-level summary (such as a bullet list) is needed here.}
+The main functions follow the use cases of the inception document. Sections 3 to 5 specify them in detail.
 \begin{itemize}
-    \item Function 1: ...
-    \item Function 2: ...
+    \item \textbf{Open the chatbot} from the university website.
+    \item \textbf{Ask a question} in natural language and receive a short answer that is based only on approved sources.
+    \item \textbf{Check the sources} of an answer and open the original document or webpage.
+    \item \textbf{Choose the response language}.
+    \item \textbf{View the conversation history} of the current session.
+    \item \textbf{Give feedback} on whether an answer was helpful.
+    \item \textbf{Request human assistance} when the chatbot cannot answer reliably. The question is then forwarded to university staff.
+    \item \textbf{Review and answer escalated questions} (university staff).
+    \item \textbf{Manage approved knowledge sources}, i.e.\ upload, update and remove documents and maintain the allowlist of external websites (knowledge administrators).
 \end{itemize}
 
 \subsection{User Classes and Characteristics}
-\guidance{Identify the various user classes that you anticipate will use this product (e.g., Students, Lecturers, Administrators) and describe their pertinent characteristics.}
+FYNDR AI has four user classes. The two student classes are the favored user classes. If requirements conflict, their needs take priority.
+
+\textbf{Regular students} look for information on timetables, registration, exams, contacts or campus services. They use FYNDR AI occasionally, mostly on a smartphone or laptop, and need no training. They know German university terms but often not which office is responsible.
+
+\textbf{International and exchange students} are new to Germany and to the university. Many of them do not speak German well and do not know local procedures and terms. They use FYNDR AI most in their first weeks and depend on answers in a language other than German and on clear references to the responsible office.
+
+\textbf{University staff} work in offices such as the International Office or the student administration. They answer escalated questions in a separate interface (\reqref{EXT-UI-007}). They are experts in their field but not in IT and need a login (\reqref{NFR-SEC-002}).
+
+\textbf{Knowledge administrators} are authorized employees who maintain the approved documents and the allowlist of external websites (\reqref{EXT-UI-008}). They use the system occasionally, e.g.\ at the start of a semester or after a rule has changed. They need basic IT skills but no programming knowledge (\reqref{NFR-QA-004}).
+
+Which offices take the roles of university staff and knowledge administrators is open (TBD-05), as is whether students have to log in (TBD-02). This SRS assumes anonymous use by students (A-07).
 
 \subsection{Operating Environment}
-\guidance{Describe the environment in which the software will operate, including hardware platform, operating system and versions, browsers, or databases.}
+\textbf{Client.} All users access FYNDR AI with a web browser, no installation is needed. Supported are the two latest major versions of Chrome, Firefox, Safari and Edge on Windows, macOS, Linux, Android and iOS, on desktop computers, laptops, tablets and smartphones (\reqref{EXT-HW-001}, \reqref{EXT-UI-002}).
+
+\textbf{Server.} The backend, the knowledge base and the stored conversations and escalations run on a server that is reachable from the internet. Whether this is a cloud service or university hardware is open (TBD-04). The backend needs access to the language model service and to the approved external websites, and to no other websites (\reqref{EXT-COM-003}).
+
+\textbf{Host website.} The chat widget runs inside the university website and has to work alongside the existing scripts and styles of that website (\reqref{EXT-SW-001}). In Part II, a demo page that imitates the university website takes this role (A-08).
 
 \subsection{Design and Implementation Constraints}
-\guidance{Describe any items or issues that will limit the options available to the developers (e.g., DHBW IT policies, mandatory frameworks, time constraints for Part II).}
+\begin{description}
+    \item[C-01 Schedule and team.] InterNex builds release 1.0 in Part II of the project (Q1 2027) with four students. Scope and priorities have to fit this time frame.
+    \item[C-02 Data protection.] Questions and conversations can contain personal data. The system has to comply with the GDPR, in particular with data minimization and storage limitation (Art.~5(1)(c) and (e) GDPR), and has to inform users about the processing of their data (Art.~13 GDPR). Retention is specified in \reqref{NFR-SEC-003}.
+    \item[C-03 AI transparency.] FYNDR AI talks directly to people. Article 50(1) of the EU AI Act, which applies since 2 August 2026, requires that users are informed that they are interacting with an AI system.
+    \item[C-04 Accessibility.] DHBW is a public body in Baden-Württemberg, so its web offerings have to be accessible (\S~10 L-BGG together with BITV 2.0). In practice this means EN 301 549, which includes WCAG 2.1 Level AA. This applies to the chat widget and to the staff and administration interfaces.
+    \item[C-05 Approved sources only.] The customer requires that FYNDR AI only uses approved documents and allowlisted websites (initial interview, 24 November 2026). Designs that rely on a general web search are therefore not possible (\reqref{NFR-BR-003}).
+    \item[C-06 University IT.] Embedding the widget into the official website, connecting to the university identity provider and running on university hardware all need approval by the university IT and web team. InterNex cannot rely on these approvals during Part II (A-04, A-08).
+    \item[C-07 Running costs.] A hosted language model service charges per request. Who pays for it during Part II and in operation is open (TBD-04). An open-source model on own hardware avoids these costs but needs a suitable server.
+    \item[C-08 Documentation language.] All project documents, including this SRS, are written in English.
+\end{description}
 
 \subsection{User Documentation}
-\guidance{List the user documentation components (such as user manuals, online help, or READMEs) that will be delivered along with the software.}
+\begin{itemize}
+    \item \textbf{Help text in the chat widget}, shown when a student opens the chat. In the selected language, it explains what FYNDR AI can and cannot answer, that answers come from an AI system (C-03), how conversation data is handled (C-02) and how to request human assistance.
+    \item \textbf{Guide for university staff and knowledge administrators}, a short online manual. It explains how to answer escalated questions and how to add, update and remove documents and allowlisted websites.
+    \item \textbf{Installation and operation guide} (README) for the team that runs the system. It covers setup, the configuration of the language model service and the allowlist, and backups of the knowledge base.
+\end{itemize}
 
 \subsection{Assumptions and Dependencies}
-\guidance{List any assumed factors (as opposed to known facts) that could affect the requirements stated in the SRS, as well as dependencies on external systems (e.g., DHBW Moodle API or LDAP).}
+Some parts of FYNDR AI need specialist knowledge in artificial intelligence and IT security. This SRS specifies these parts on a higher level of abstraction and assumes that existing open-source libraries or services provide them. InterNex has to confirm each assumption. If an assumption turns out to be wrong, the requirements that refer to it have to be reviewed.
+
+\begin{description}
+    \item[A-01 Language model.] An existing large language model generates the answer text. It is either a hosted service accessed via an API or an open-source model on own hardware (\reqref{EXT-SW-004}). FYNDR AI does not train or fine-tune its own model. The choice of model is open (TBD-04).
+    \item[A-02 Retrieval.] An existing open-source library (e.g.\ LlamaIndex or Haystack) indexes the approved documents and webpages and finds the passages that match a question (\reqref{EXT-SW-002}, \reqref{EXT-SW-003}). This SRS only specifies the visible behavior, i.e.\ answers are based on approved sources and show them.
+    \item[A-03 Multilingual answers.] The language model answers in the selected language. FYNDR AI has no separate translation component. The developers translate the interface texts once.
+    \item[A-04 Staff login.] The university identity provider is available for the staff and administration interfaces (\reqref{EXT-SW-006}). If it is not available in Part II, an existing open-source identity provider (e.g.\ Keycloak) takes its place. FYNDR AI does not implement its own password handling.
+    \item[A-05 Encryption.] Standard TLS on the web server or hosting platform provides the transport encryption (\reqref{EXT-COM-001}, \reqref{NFR-SEC-001}). FYNDR AI does not implement its own cryptography.
+    \item[A-06 University content.] The university provides the documents for the knowledge base, and the knowledge administrators keep them up to date. Answers can only be as correct as these documents.
+    \item[A-07 Anonymous use.] Students use FYNDR AI without logging in. The conversation history is therefore bound to the browser session (\reqref{EXT-UI-009}, TBD-02).
+    \item[A-08 Demo environment.] In Part II, a demo page that imitates the university website hosts the chat widget. Integration into the official university website is not part of the project.
+    \item[A-09 Staff availability.] University staff answer escalated questions during their normal working hours. FYNDR AI does not guarantee a response time for human answers.
+    \item[A-10 External websites.] The operators of the allowlisted websites permit automated retrieval of their public pages.
+\end{description}
 
 % ------------------------------------------------------------------------------
 \section{External Interface Requirements}
@@ -328,43 +477,557 @@ The backend shall communicate with the persistent knowledge database (\reqref{EX
 }
 
 % ------------------------------------------------------------------------------
+% ==============================================================================
+% Chapter 4 "System Features" for requirements_engineering.tex (FYNDR AI)
+% Version with student login (assumption, open question "Usage").
+% Replaces everything from "\section{System Features}" down to the closing "}"
+% of the template requirement FR-03 (the last line before the dashed comment
+% line above "\section{Other Nonfunctional Requirements}").
+% ==============================================================================
 \section{System Features}
 % ------------------------------------------------------------------------------
-\guidance{Organize the functional requirements for the product by system features or use cases. Copy subsection 4.1 for each additional feature.}
 
-\subsection{User Authentication and Profile Management}
+This section specifies the functional requirements of \textbf{FYNDR AI}, organized by system feature. Each feature realizes one or more use cases of the initial use-case diagram in the Inception Document. The functional requirements describe \emph{what} the system does. The user interfaces are specified in Section~3 and quality attributes such as response times in Section~5.
+
+\paragraph{Terms used in this section.}
+\begin{description}
+    \item[Approved source] A university document that a knowledge administrator has added, or a website whose domain is on the allowlist (\reqref{EXT-COM-003}).
+    \item[Conversation] A sequence of questions, answers and staff replies between one student and the chatbot. A student can have several conversations. They are stored in the student's account until the student deletes them or the retention period of \reqref{NFR-SEC-003} has expired.
+    \item[Escalated question] A student question that has been forwarded to university staff for a personal reply.
+    \item[Student] In this section, any logged-in user who uses the chatbot.
+\end{description}
+
+\paragraph{Sources.} Every requirement names its source so that it can be traced back:
+\begin{itemize}
+    \item \textbf{[INC]}: Inception Document of FYNDR AI by InterNex (Team 2). ``UC'' refers to a use case in its use-case diagram.
+    \item \textbf{[INT-1]}: Initial interview with InterNex on 2026-11-24.
+    \item \textbf{RE team}: Proposed by the requirements engineering team to close a gap. It still has to be confirmed by the customer. If the proposal answers an open question of the elicitation, the source names this question, for example (open question ``Usage'').
+\end{itemize}
+
+\paragraph{Priorities.} \textbf{High}: essential for the first release. \textbf{Medium}: important, but the first release is usable without it. \textbf{Low}: desirable, can be postponed.
+
+% ------------------------------------------------------------------------------
+\subsection{Login and Roles}
+\label{sec:feat-auth}
+% ------------------------------------------------------------------------------
 \subsubsection{Description and Priority}
-This feature allows DHBW students and lecturers to securely log into the platform using their university credentials and manage their profile settings. \textbf{Priority: High} (Benefit: 9, Penalty: 8, Cost: 3, Risk: 2).
+All users log in with their existing university account via the university identity provider (\reqref{EXT-SW-006}). Every logged-in user can use the chatbot (Sections~\ref{sec:feat-chat} to~\ref{sec:feat-esc}). The functions for university staff (Section~\ref{sec:feat-staff}) and for knowledge administrators (Section~\ref{sec:feat-kb} and \reqref{FR-FB-004}) additionally require the role University Staff or Knowledge Administrator. One person can have both roles.
+
+\textbf{Priority: High.} The login links conversations and escalated questions to a person and protects the staff and administration functions (\reqref{NFR-SEC-002}).
 
 \subsubsection{Stimulus/Response Sequences}
 \begin{enumerate}
-    \item \textbf{Stimulus:} User clicks ``Login with DHBW Account'' on the landing page.
-    \item \textbf{Response:} System redirects to the university authentication provider.
-    \item \textbf{Stimulus:} User enters valid credentials and confirms.
-    \item \textbf{Response:} System creates a user session and displays the personal dashboard.
+    \item \textbf{Stimulus:} A user who is not logged in opens the chatbot.\\
+          \textbf{Response:} The system asks the user to log in and redirects to the university login.
+    \item \textbf{Stimulus:} The user logs in successfully.\\
+          \textbf{Response:} The system returns to the chat overlay and displays the user's most recent conversation.
+    \item \textbf{Stimulus:} A logged-in user opens the staff or administration interface.\\
+          \textbf{Response:} The system displays the functions of the user's roles.
+    \item \textbf{Stimulus (alternative):} A user without the required role opens the staff or administration interface.\\
+          \textbf{Response:} The system denies access and displays a message.
+    \item \textbf{Stimulus:} A logged-in user is inactive for 30 minutes.\\
+          \textbf{Response:} The system logs the user out.
 \end{enumerate}
 
 \subsubsection{Functional Requirements}
-% Example for using the requirements macro
-\req{FR-01}{DHBW Single Sign-On}{High}{
-    The system shall allow users to authenticate using their official DHBW university credentials. If authentication fails, an informative error message shall be displayed without revealing sensitive account details.
+\req{FR-AUTH-001}{Login With University Account}{High}{
+The system shall grant access to its functions only after a successful login via the university identity provider (\reqref{EXT-SW-006}).\par\smallskip
+{\small\textit{Source:} RE team assumption (open questions ``Usage'' and ``Access before arrival''); \reqref{EXT-SW-006}; \reqref{NFR-SEC-002}.\par}
 }
 
-\req{FR-02}{Role Assignment}{High}{
-    Upon first successful login, the system shall automatically assign the user role (Student or Lecturer) based on the directory attributes returned by the identity provider (see \reqref{FR-01}).
+\req{FR-AUTH-002}{Login From the Chatbot}{High}{
+When a user who is not logged in opens the chatbot, the system shall ask the user to log in and afterwards return to the chat overlay.\par\smallskip
+{\small\textit{Source:} RE team.\par}
 }
 
-\subsection{System Feature 2 (Replace with Feature Name)}
+\req{FR-AUTH-003}{Chatbot Access for All Users}{High}{
+The system shall allow every logged-in user to use the functions of Sections~\ref{sec:feat-chat} to~\ref{sec:feat-esc}.\par\smallskip
+{\small\textit{Source:} [INC] Section 5; RE team assumption (open question ``Users'').\par}
+}
+
+\req{FR-AUTH-004}{Role Assignment}{High}{
+The system shall assign the roles University Staff and Knowledge Administrator to a logged-in user based on the user's group membership in the university identity provider.\par\smallskip
+{\small\textit{Source:} RE team assumption (open question ``Roles'').\par}
+}
+
+\req{FR-AUTH-005}{Access Without Role}{High}{
+If a logged-in user without the required role opens the staff or the administration interface, the system shall deny access and display a message that the user has no access rights.\par\smallskip
+{\small\textit{Source:} \reqref{NFR-SEC-002}; \reqref{NFR-BR-001}; \reqref{NFR-BR-002}.\par}
+}
+
+\req{FR-AUTH-006}{Logout}{Medium}{
+The system shall allow a logged-in user to log out.\par\smallskip
+{\small\textit{Source:} RE team.\par}
+}
+
+\req{FR-AUTH-007}{Automatic Logout}{Medium}{
+The system shall log out a logged-in user after 30 minutes without activity.\par\smallskip
+{\small\textit{Source:} RE team assumption (open question ``Session timeout'').\par}
+}
+
+% ------------------------------------------------------------------------------
+\subsection{Chatbot and Conversations}
+\label{sec:feat-chat}
+% ------------------------------------------------------------------------------
 \subsubsection{Description and Priority}
-\guidance{Provide a short description of the feature and indicate whether it is of High, Medium, or Low priority.}
+Students open the chatbot on the university website and talk to it in conversations. The conversations are stored in the student's account, so the student can close the chatbot and continue later on any device. The student can start a new conversation at any time. Earlier conversations are described in Section~\ref{sec:feat-hist}.
+
+\textbf{Priority: High.} All other student features depend on it.
 
 \subsubsection{Stimulus/Response Sequences}
-\guidance{List the sequences of user actions and system responses that stimulate the behavior defined for this feature.}
+\begin{enumerate}
+    \item \textbf{Stimulus:} The student activates the chatbot button on a page of the university website.\\
+          \textbf{Response:} The system opens the chat overlay on this page, after a login if needed (Section~\ref{sec:feat-auth}).
+    \item \textbf{Stimulus:} The student uses the chatbot for the first time.\\
+          \textbf{Response:} The system displays the data protection notice before the first question.
+    \item \textbf{Stimulus:} The student opens the chatbot again, also on another device.\\
+          \textbf{Response:} The system displays the student's most recent conversation.
+    \item \textbf{Stimulus:} The student starts a new conversation.\\
+          \textbf{Response:} The system displays an empty conversation. The previous conversation remains in the history.
+\end{enumerate}
 
 \subsubsection{Functional Requirements}
-\req{FR-03}{Example Requirement Title}{Medium}{
-    The system shall ...
+\req{FR-CHAT-001}{Open the Chatbot}{High}{
+The system shall open the chat overlay (\reqref{EXT-UI-001}) on the current page when the student activates the chatbot button on a page of the university website.\par\smallskip
+{\small\textit{Source:} [INC] UC ``Open ChatBot''; [INT-1]; RE team assumption on the pages that show the chatbot (open question ``Where'').\par}
 }
+
+\req{FR-CHAT-002}{Data Protection Notice}{High}{
+The system shall display the data protection notice required by \reqref{NFR-SEC-003} before the student sends the first question.\par\smallskip
+{\small\textit{Source:} \reqref{NFR-SEC-003}.\par}
+}
+
+\req{FR-CHAT-003}{Continue the Most Recent Conversation}{Medium}{
+When the student opens the chatbot, the system shall display the student's most recent conversation, also on a different device than before.\par\smallskip
+{\small\textit{Source:} [INC] Section 3 (conversation history); \reqref{EXT-UI-009}; RE team assumption (open question ``History'').\par}
+}
+
+\req{FR-CHAT-004}{Starting a New Conversation}{Medium}{
+The system shall allow the student to start a new, empty conversation at any time.\par\smallskip
+{\small\textit{Source:} RE team assumption (open question ``Conversations'').\par}
+}
+
+% ------------------------------------------------------------------------------
+\subsection{Question Answering}
+\label{sec:feat-ans}
+% ------------------------------------------------------------------------------
+\subsubsection{Description and Priority}
+The student asks a question in their own words. The system searches the approved sources, writes an answer and lists the sources it used. The chatbot covers university administration, student services and everyday student life. Course content and academic tutoring are out of scope ([INC] Section 1). If the approved sources do not contain the answer, the system says so and offers to forward the question to university staff (Section~\ref{sec:feat-esc}). That answers are based only on approved sources and contain no binding official decisions is specified in \reqref{NFR-SAFE-002} and \reqref{NFR-SAFE-001}.
+
+\textbf{Priority: High.} Answering questions is the main purpose of the system.
+
+\subsubsection{Stimulus/Response Sequences}
+\begin{enumerate}
+    \item \textbf{Stimulus:} The student types a question and sends it.\\
+          \textbf{Response:} The system displays the question in the conversation, searches the approved sources and displays the answer with a list of the sources used.
+    \item \textbf{Stimulus:} The student selects a source reference below an answer.\\
+          \textbf{Response:} The system opens the referenced document or webpage. The conversation stays open.
+    \item \textbf{Stimulus:} The student asks a follow-up question.\\
+          \textbf{Response:} The system answers it in the context of the previous messages.
+    \item \textbf{Stimulus (alternative):} The student asks a question that the approved sources cannot answer.\\
+          \textbf{Response:} The system states that it cannot answer the question and offers to forward it to university staff.
+    \item \textbf{Stimulus (alternative):} The student asks a question outside the scope, for example for help with a mathematics exercise.\\
+          \textbf{Response:} The system replies that it cannot help with this topic and names the topics it can answer.
+\end{enumerate}
+
+\subsubsection{Functional Requirements}
+\req{FR-ANS-001}{Free-Text Questions}{High}{
+The system shall accept questions that the student types as free text in the conversation.\par\smallskip
+{\small\textit{Source:} [INC] UC ``Ask a Question''.\par}
+}
+
+\req{FR-ANS-002}{Search of Approved Sources}{High}{
+For each question, the system shall search all approved sources for information relevant to the question.\par\smallskip
+{\small\textit{Source:} [INC] UC ``Search Approved Knowledge Sources''; \reqref{EXT-SW-002}; \reqref{EXT-SW-003}.\par}
+}
+
+\req{FR-ANS-003}{Answer Based on Found Information}{High}{
+The system shall display an answer to the question in the conversation that is based on the information found according to \reqref{FR-ANS-002} (see \reqref{NFR-SAFE-002}).\par\smallskip
+{\small\textit{Source:} [INC] UC ``Ask a Question''; [INC] Section 3.\par}
+}
+
+\req{FR-ANS-004}{Follow-Up Questions}{Medium}{
+The system shall take the previous questions and answers of the current conversation into account when it answers a question.\par\smallskip
+{\small\textit{Source:} [INC] Section 3 (conversational interface).\par}
+}
+
+\req{FR-ANS-005}{Clarifying Questions}{Medium}{
+If a question can refer to more than one topic in the approved sources, the system shall ask the student which topic is meant before it answers.\par\smallskip
+{\small\textit{Source:} [INC] Section 3 (unclear questions).\par}
+}
+
+\req{FR-ANS-006}{Responsible Contact}{Medium}{
+If the approved sources name an office or a contact person responsible for the topic of the question, the system shall include this contact in the answer.\par\smallskip
+{\small\textit{Source:} [INC] Section 5 (finding the correct university contact).\par}
+}
+
+\req{FR-ANS-007}{Source References}{High}{
+The system shall list every approved source that an answer is based on below the answer.\par\smallskip
+{\small\textit{Source:} [INC] Section 3; \reqref{EXT-UI-004}; \reqref{EXT-SW-007}.\par}
+}
+
+\req{FR-ANS-008}{Opening a Referenced Source}{Medium}{
+When the student selects a source reference, the system shall open the referenced document or webpage, at the referenced section if the source provides one, without closing the conversation.\par\smallskip
+{\small\textit{Source:} \reqref{EXT-UI-004}; \reqref{EXT-SW-007}.\par}
+}
+
+\req{FR-ANS-009}{No Suitable Information Found}{High}{
+If the approved sources contain no information that answers the question, the system shall tell the student that it cannot answer the question from the approved sources.\par\smallskip
+{\small\textit{Source:} [INT-1]; \reqref{NFR-SAFE-002}.\par}
+}
+
+\req{FR-ANS-010}{Out-of-Scope Questions}{High}{
+If a question does not concern university administration, student services or student life, the system shall reply that it cannot help with this topic and name the topics it can answer.\par\smallskip
+{\small\textit{Source:} [INC] Section 1; \reqref{EXT-SW-005}; RE team assumption (open question ``Outside information'').\par}
+}
+
+\req{FR-ANS-011}{Precedence of University Documents}{Medium}{
+If an approved university document and an approved external website contain contradicting information on the same question, the system shall base the answer on the university document.\par\smallskip
+{\small\textit{Source:} [INC] Section 3 (university documents are the primary source); RE team assumption (open question ``Information conflict'').\par}
+}
+
+% ------------------------------------------------------------------------------
+\subsection{Language Selection}
+\label{sec:feat-lang}
+% ------------------------------------------------------------------------------
+\subsubsection{Description and Priority}
+International and exchange students are a main target group ([INC] Section 5). The student chooses the language of the user interface and of the answers from the supported languages (\reqref{NFR-QA-002}). The system saves the choice in the student's account. The approved sources keep their original language. Only the answers are written in the selected language.
+
+\textbf{Priority: High.} Without it, the system does not reach one of its main target groups.
+
+\subsubsection{Stimulus/Response Sequences}
+\begin{enumerate}
+    \item \textbf{Stimulus:} The student uses the chatbot for the first time.\\
+          \textbf{Response:} The system displays the user interface in the language of the web browser if it is supported, otherwise in English.
+    \item \textbf{Stimulus:} The student selects another language.\\
+          \textbf{Response:} The system displays the user interface and all following answers in the new language and saves the choice. Earlier messages stay unchanged.
+    \item \textbf{Stimulus:} The student logs in on another device.\\
+          \textbf{Response:} The system uses the saved language.
+    \item \textbf{Stimulus:} With English selected, the student asks a question that only a German document answers.\\
+          \textbf{Response:} The system answers in English and marks the reference as a German source.
+\end{enumerate}
+
+\subsubsection{Functional Requirements}
+\req{FR-LANG-001}{Selecting the Language}{High}{
+The system shall allow the student to select the language from the supported languages (\reqref{NFR-QA-002}) at any time.\par\smallskip
+{\small\textit{Source:} [INC] UC ``Choose Response Language''; \reqref{EXT-UI-003}.\par}
+}
+
+\req{FR-LANG-002}{Default Language}{Medium}{
+When the student uses the chatbot for the first time, the system shall preselect the language of the student's web browser if it is supported, and English otherwise.\par\smallskip
+{\small\textit{Source:} RE team assumption (open question ``Language selection'').\par}
+}
+
+\req{FR-LANG-003}{Saved Language}{Medium}{
+The system shall save the selected language in the student's account and use it for all following conversations, also on other devices.\par\smallskip
+{\small\textit{Source:} RE team assumption (open question ``Language selection'').\par}
+}
+
+\req{FR-LANG-004}{Answers in the Selected Language}{High}{
+The system shall write every answer in the selected language, regardless of the language of the question and of the sources used.\par\smallskip
+{\small\textit{Source:} [INC] Section 3 (multilingual question answering); \reqref{EXT-SW-004}; RE team assumption (open question ``Language selection'').\par}
+}
+
+\req{FR-LANG-005}{Changing the Language}{Medium}{
+After the student has changed the language, the system shall display the user interface and all following answers in the new language without starting a new conversation.\par\smallskip
+{\small\textit{Source:} \reqref{EXT-UI-003}.\par}
+}
+
+\req{FR-LANG-006}{Language of Referenced Sources}{Low}{
+The system shall show the language of a referenced source next to the reference if it differs from the selected language.\par\smallskip
+{\small\textit{Source:} RE team (students may not be able to read every source).\par}
+}
+
+% ------------------------------------------------------------------------------
+\subsection{Conversation History}
+\label{sec:feat-hist}
+% ------------------------------------------------------------------------------
+\subsubsection{Description and Priority}
+Students can read their earlier conversations again ([INC] UC ``View Conversation History''). Because the conversations are stored in the student's account, the history is available on every device. Each student sees only their own conversations and can delete a conversation at any time.
+
+\textbf{Priority: Medium.} With the login, the history is available on every device. The RE team therefore proposes Medium instead of the Low priority of the related interface requirement \reqref{EXT-UI-009}.
+
+\subsubsection{Stimulus/Response Sequences}
+\begin{enumerate}
+    \item \textbf{Stimulus:} The student opens the history.\\
+          \textbf{Response:} The system displays a list of the student's conversations, the newest first.
+    \item \textbf{Stimulus:} The student selects a conversation.\\
+          \textbf{Response:} The system displays all its messages. The student can ask further questions in it.
+    \item \textbf{Stimulus:} The student chooses to delete a conversation.\\
+          \textbf{Response:} The system warns about escalated questions without a reply, asks for confirmation and deletes the conversation.
+\end{enumerate}
+
+\subsubsection{Functional Requirements}
+\req{FR-HIST-001}{Only Own Conversations}{High}{
+The system shall show each student only the conversations of the student's own account.\par\smallskip
+{\small\textit{Source:} RE team (data protection, \reqref{NFR-SEC-003}).\par}
+}
+
+\req{FR-HIST-002}{List of Conversations}{Medium}{
+The system shall show the student a list of the student's conversations, the newest first, each with its date and its first question.\par\smallskip
+{\small\textit{Source:} [INC] UC ``View Conversation History''; \reqref{EXT-UI-009}.\par}
+}
+
+\req{FR-HIST-003}{Opening a Conversation}{Medium}{
+When the student selects a conversation from the list, the system shall display all its questions, answers and staff replies in chronological order.\par\smallskip
+{\small\textit{Source:} [INC] UC ``View Conversation History''; \reqref{EXT-UI-009}.\par}
+}
+
+\req{FR-HIST-004}{Continuing an Earlier Conversation}{Low}{
+The system shall allow the student to ask further questions in an earlier conversation.\par\smallskip
+{\small\textit{Source:} RE team assumption (open question ``Conversations'').\par}
+}
+
+\req{FR-HIST-005}{Deleting a Conversation}{Medium}{
+The system shall allow the student to delete a conversation.\par\smallskip
+{\small\textit{Source:} RE team (data protection, \reqref{NFR-SEC-003}).\par}
+}
+
+\req{FR-HIST-006}{Warning Before Deletion}{Low}{
+Before it deletes a conversation that contains an escalated question without a reply, the system shall warn the student that the reply can no longer be delivered.\par\smallskip
+{\small\textit{Source:} RE team.\par}
+}
+
+\req{FR-HIST-007}{Withdrawal of Open Escalations}{Medium}{
+When the student deletes a conversation, the system shall set every escalated question of this conversation that has no reply yet to the status Closed with the reason ``withdrawn by student''.\par\smallskip
+{\small\textit{Source:} RE team.\par}
+}
+
+% ------------------------------------------------------------------------------
+\subsection{Answer Feedback}
+\label{sec:feat-fb}
+% ------------------------------------------------------------------------------
+\subsubsection{Description and Priority}
+Students can rate each answer as helpful or not helpful ([INC] UC ``Submit Feedback'', \reqref{EXT-UI-005}). Knowledge administrators use the answers rated as not helpful to find missing or outdated sources. The feedback is stored without the identity of the student.
+
+\textbf{Priority: Medium.} Feedback improves the answers over time, but the chatbot works without it.
+
+\subsubsection{Stimulus/Response Sequences}
+\begin{enumerate}
+    \item \textbf{Stimulus:} The student rates an answer as helpful.\\
+          \textbf{Response:} The system stores the rating and marks the answer as rated.
+    \item \textbf{Stimulus:} The student rates an answer as not helpful.\\
+          \textbf{Response:} The system stores the rating and offers an optional comment field.
+    \item \textbf{Stimulus:} A knowledge administrator opens the feedback overview.\\
+          \textbf{Response:} The system lists all answers rated as not helpful.
+\end{enumerate}
+
+\subsubsection{Functional Requirements}
+\req{FR-FB-001}{Rating an Answer}{Medium}{
+The system shall allow the student to rate each answer as either ``helpful'' or ``not helpful''.\par\smallskip
+{\small\textit{Source:} [INC] UC ``Submit Feedback''; \reqref{EXT-UI-005}.\par}
+}
+
+\req{FR-FB-002}{Comment on a Negative Rating}{Low}{
+After a ``not helpful'' rating, the system shall offer the student an optional text field to describe what was wrong with the answer.\par\smallskip
+{\small\textit{Source:} [INC] Section 3 (answer ``needs improvement''); RE team assumption (open question ``Feedback'').\par}
+}
+
+\req{FR-FB-003}{Storing Feedback}{Medium}{
+The system shall store each rating together with the question, the answer, the sources used and the optional comment, but without the identity of the student, for the retention period of \reqref{NFR-SEC-003}.\par\smallskip
+{\small\textit{Source:} RE team (needed for \reqref{FR-FB-004}; data protection).\par}
+}
+
+\req{FR-FB-004}{Feedback Overview}{Medium}{
+The system shall show knowledge administrators, in the administration interface (\reqref{EXT-UI-008}), a list of all stored answers rated as ``not helpful'', each with its question, answer, sources used and comment.\par\smallskip
+{\small\textit{Source:} [INC] Section 3 (answer ``needs improvement''); RE team.\par}
+}
+
+% ------------------------------------------------------------------------------
+\subsection{Human Escalation}
+\label{sec:feat-esc}
+% ------------------------------------------------------------------------------
+\subsubsection{Description and Priority}
+If the chatbot cannot answer a question, or the question needs an official decision, the student can forward it to university staff ([INC] UC ``Request Human Assistance'', [INT-1]). Before sending, the student sees which data will be forwarded, including the student's name and university e-mail address. The staff reply appears in the same conversation and is marked as a reply from a person. The student is informed about the reply by e-mail. Table~\ref{tab:esc-status} defines the status values of an escalated question that are used in this section and in Section~\ref{sec:feat-staff}.
+
+\begin{table}[H]
+    \centering
+    \caption{Status values of an escalated question}
+    \label{tab:esc-status}
+    \begin{tabularx}{\textwidth}{l X}
+        \toprule
+        \textbf{Status} & \textbf{Meaning} \\
+        \midrule
+        Open        & The student has forwarded the question. No staff member has taken it over yet. \\
+        In Progress & A staff member has taken over the question (\reqref{FR-STAFF-005}). \\
+        Answered    & A staff member has sent a reply (\reqref{FR-STAFF-006}). \\
+        Closed      & A staff member has closed the question without a reply and entered a reason (\reqref{FR-STAFF-007}), or the student has deleted the conversation (\reqref{FR-HIST-007}). \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\textbf{Priority: High.} According to [INT-1], the customer expects that questions the chatbot cannot answer reach a person.
+
+\subsubsection{Stimulus/Response Sequences}
+\begin{enumerate}
+    \item \textbf{Stimulus:} The system cannot answer a question (\reqref{FR-ANS-009}), or the question requires an official decision.\\
+          \textbf{Response:} The system offers to forward the question to university staff.
+    \item \textbf{Stimulus:} The student accepts the offer.\\
+          \textbf{Response:} The system shows the data that will be forwarded and asks for confirmation.
+    \item \textbf{Stimulus:} The student confirms.\\
+          \textbf{Response:} The system forwards the question to university staff and shows the status Open in the conversation.
+    \item \textbf{Stimulus:} A staff member sends a reply (Section~\ref{sec:feat-staff}).\\
+          \textbf{Response:} The system displays the reply in the conversation, marked as a reply from university staff, shows the status Answered and informs the student by e-mail.
+    \item \textbf{Stimulus:} The student opens the chatbot later, also on another device.\\
+          \textbf{Response:} The system shows an indicator for the unread reply on the chatbot button and displays the reply in the conversation.
+\end{enumerate}
+
+\subsubsection{Functional Requirements}
+\req{FR-ESC-001}{Offering Escalation}{High}{
+The system shall offer the student to forward a question to university staff when it cannot answer the question (\reqref{FR-ANS-009}) or when the question requires an official decision (\reqref{NFR-SAFE-001}).\par\smallskip
+{\small\textit{Source:} [INT-1]; [INC] UC ``Request Human Assistance''; \reqref{EXT-UI-006}.\par}
+}
+
+\req{FR-ESC-002}{Escalation on Student Request}{Medium}{
+The system shall allow the student to forward any question of a conversation to university staff, also when the system has not offered it.\par\smallskip
+{\small\textit{Source:} [INC] UC ``Request Human Assistance''; RE team assumption (open question ``Escalation trigger'').\par}
+}
+
+\req{FR-ESC-003}{Confirmation Before Forwarding}{High}{
+The system shall forward a question to university staff only after it has shown the student the data to be forwarded and the student has confirmed. These data are the question, the conversation context (\reqref{EXT-COM-004}), and the student's name and university e-mail address.\par\smallskip
+{\small\textit{Source:} RE team (transparency about personal data, \reqref{NFR-SEC-003}); RE team assumption (open question ``Student data for staff'').\par}
+}
+
+\req{FR-ESC-004}{Escalation Status}{Medium}{
+The system shall display the current status (Table~\ref{tab:esc-status}) of each escalated question in the conversation, including the reason if the status is Closed.\par\smallskip
+{\small\textit{Source:} RE team.\par}
+}
+
+\req{FR-ESC-005}{Displaying the Staff Reply}{High}{
+The system shall display the reply of a staff member in the conversation of the escalated question and mark it as a reply from university staff.\par\smallskip
+{\small\textit{Source:} [INT-1]; \reqref{EXT-COM-005}.\par}
+}
+
+\req{FR-ESC-006}{Indicator for Unread Replies}{Low}{
+The system shall show an indicator on the chatbot button while a staff reply exists that the student has not seen yet.\par\smallskip
+{\small\textit{Source:} RE team assumption (open question ``Notifications'').\par}
+}
+
+\req{FR-ESC-007}{E-Mail Notification}{Medium}{
+When a staff member has replied to an escalated question, the system shall send an e-mail without the content of the reply to the student's university e-mail address, stating that a reply is available.\par\smallskip
+{\small\textit{Source:} RE team assumption (open question ``Notifications'').\par}
+}
+
+% ------------------------------------------------------------------------------
+\subsection{Escalated Question Handling}
+\label{sec:feat-staff}
+% ------------------------------------------------------------------------------
+\subsubsection{Description and Priority}
+Staff members with the role University Staff see the escalated questions in a list, take over a question, and answer it or close it with a reason (\reqref{EXT-UI-007}, \reqref{NFR-BR-002}). All escalated questions go to one shared list. Routing to specific offices, such as the International Office, is not planned (open question ``Escalation routing''). Staff members are not notified about new questions and check the list themselves (open question ``Notifications'').
+
+\textbf{Priority: High.} Without this feature, escalated questions are never answered.
+
+\subsubsection{Stimulus/Response Sequences}
+\begin{enumerate}
+    \item \textbf{Stimulus:} A staff member logs in (Section~\ref{sec:feat-auth}) and opens the list of escalated questions.\\
+          \textbf{Response:} The system displays all escalated questions, the oldest first.
+    \item \textbf{Stimulus:} The staff member filters the list by status or language.\\
+          \textbf{Response:} The system displays only the matching questions.
+    \item \textbf{Stimulus:} The staff member opens a question.\\
+          \textbf{Response:} The system displays the question, its context and the student's name and e-mail address, with a German translation if the question is in another language.
+    \item \textbf{Stimulus:} The staff member takes over the question.\\
+          \textbf{Response:} The system sets the status to In Progress and shows the staff member's name to all other staff members.
+    \item \textbf{Stimulus:} The staff member writes a reply and sends it.\\
+          \textbf{Response:} The system delivers the reply to the student's conversation and sets the status to Answered.
+    \item \textbf{Stimulus (alternative):} The staff member closes the question and enters a reason.\\
+          \textbf{Response:} The system sets the status to Closed and shows the reason to the student.
+\end{enumerate}
+
+\subsubsection{Functional Requirements}
+\req{FR-STAFF-001}{List of Escalated Questions}{High}{
+The system shall show university staff a list of all escalated questions with submission time, language and status, sorted by submission time with the oldest question first.\par\smallskip
+{\small\textit{Source:} [INC] UC ``Review Escalated Questions''; \reqref{EXT-UI-007}.\par}
+}
+
+\req{FR-STAFF-002}{Filtering the List}{Medium}{
+The system shall allow university staff to filter the list of escalated questions by status and by language.\par\smallskip
+{\small\textit{Source:} \reqref{EXT-UI-007}.\par}
+}
+
+\req{FR-STAFF-003}{Question Details}{High}{
+For a selected escalated question, the system shall show the question, the conversation context forwarded with it, and the student's name and university e-mail address.\par\smallskip
+{\small\textit{Source:} \reqref{EXT-COM-004}; RE team assumption (open question ``Student data for staff'').\par}
+}
+
+\req{FR-STAFF-004}{Translation for Staff}{Medium}{
+If an escalated question is not in German, the system shall show a German translation of the question and its context next to the original text.\par\smallskip
+{\small\textit{Source:} RE team assumption (open question ``Escalation language'').\par}
+}
+
+\req{FR-STAFF-005}{Taking Over a Question}{Medium}{
+When a staff member takes over an open escalated question, the system shall set its status to In Progress and show the name of this staff member to all other staff members.\par\smallskip
+{\small\textit{Source:} RE team (prevents two staff members from answering the same question).\par}
+}
+
+\req{FR-STAFF-006}{Replying to a Question}{High}{
+When a staff member sends a reply to an escalated question, the system shall deliver the reply to the student's conversation (\reqref{FR-ESC-005}) and set the status to Answered.\par\smallskip
+{\small\textit{Source:} [INC] UC ``Review Escalated Questions''; \reqref{EXT-COM-005}.\par}
+}
+
+\req{FR-STAFF-007}{Closing Without Reply}{Medium}{
+The system shall allow a staff member to close an escalated question without a reply only after the staff member has entered a reason.\par\smallskip
+{\small\textit{Source:} RE team (for example duplicate or abusive questions).\par}
+}
+
+% ------------------------------------------------------------------------------
+\subsection{Knowledge Source Management}
+\label{sec:feat-kb}
+% ------------------------------------------------------------------------------
+\subsubsection{Description and Priority}
+Knowledge administrators maintain the approved sources: university documents and the allowlist of external website domains ([INC] UC ``Manage Approved Knowledge Sources'', \reqref{EXT-UI-008}). Only knowledge administrators may change the approved sources (\reqref{NFR-BR-001}). The chatbot uses changes within the time defined in \reqref{NFR-QA-004}.
+
+\textbf{Priority: High.} Without approved sources, the chatbot cannot answer any question.
+
+\subsubsection{Stimulus/Response Sequences}
+\begin{enumerate}
+    \item \textbf{Stimulus:} A knowledge administrator logs in and opens the source management.\\
+          \textbf{Response:} The system displays the list of approved sources.
+    \item \textbf{Stimulus:} The administrator uploads a PDF document and enters a title.\\
+          \textbf{Response:} The system adds the document with the status Processing and changes it to Active once the document is used for answers.
+    \item \textbf{Stimulus:} The administrator replaces a document with a new version.\\
+          \textbf{Response:} The system uses only the new version once the change has taken effect.
+    \item \textbf{Stimulus:} The administrator removes a source.\\
+          \textbf{Response:} The system no longer uses the source once the change has taken effect.
+    \item \textbf{Stimulus:} The administrator adds a website domain to the allowlist.\\
+          \textbf{Response:} The system uses the content of this domain for answers.
+\end{enumerate}
+
+\subsubsection{Functional Requirements}
+\req{FR-KB-001}{List of Approved Sources}{High}{
+The system shall show knowledge administrators a list of all approved sources with title, type (document or website), processing status (\reqref{FR-KB-006}) and date of the last change.\par\smallskip
+{\small\textit{Source:} [INC] UC ``Manage Approved Knowledge Sources''; \reqref{EXT-UI-008}.\par}
+}
+
+\req{FR-KB-002}{Adding a Document}{High}{
+The system shall allow knowledge administrators to add a university document in PDF format with a title as an approved source.\par\smallskip
+{\small\textit{Source:} [INC] Section 1 (PDF documents); \reqref{EXT-SW-003}.\par}
+}
+
+\req{FR-KB-003}{Replacing a Document}{High}{
+When a knowledge administrator replaces an approved document with a new version, the system shall use only the new version for answers once the change has taken effect (\reqref{NFR-QA-004}).\par\smallskip
+{\small\textit{Source:} [INC] Section 1 (students do not know which source is current); \reqref{EXT-UI-008}.\par}
+}
+
+\req{FR-KB-004}{Removing a Source}{High}{
+When a knowledge administrator removes an approved source, the system shall no longer use it for answers or references once the change has taken effect (\reqref{NFR-QA-004}).\par\smallskip
+{\small\textit{Source:} [INC] UC ``Manage Approved Knowledge Sources''; \reqref{EXT-UI-008}.\par}
+}
+
+\req{FR-KB-005}{Adding a Website Domain}{High}{
+The system shall allow knowledge administrators to add an external website domain to the allowlist (\reqref{EXT-COM-003}).\par\smallskip
+{\small\textit{Source:} [INT-1] (internet access restricted to websites managed by an administrator); \reqref{EXT-SW-002}.\par}
+}
+
+\req{FR-KB-006}{Processing Status}{Medium}{
+The system shall show for each approved source whether it is used for answers (Active), not used yet (Processing) or could not be processed (Failed).\par\smallskip
+{\small\textit{Source:} RE team (\reqref{NFR-QA-004} allows a delay before changes take effect).\par}
+}
+
+\req{FR-KB-007}{Change Log}{Low}{
+The system shall keep a change log, visible to knowledge administrators, that records each change to the approved sources with date, time, knowledge administrator and type of change.\par\smallskip
+{\small\textit{Source:} RE team (accountability towards university management, [INC] Section 4).\par}
+}
+
 
 % ------------------------------------------------------------------------------
 \section{Other Nonfunctional Requirements}
@@ -458,10 +1121,19 @@ The chatbot shall never use websites that are not on the approved allowlist (\re
 \section{Glossary}
 \guidance{Define all the terms necessary to properly interpret the SRS, including acronyms and abbreviations.}
 \begin{description}
+    \item[AI] Artificial intelligence.
+    \item[Allowlist] List of external websites that a knowledge administrator has approved as sources.
     \item[DHBW] Duale Hochschule Baden-Württemberg.
+    \item[Escalation] Handing over a question from the chatbot to university staff.
+    \item[GDPR] General Data Protection Regulation, Regulation (EU) 2016/679.
+    \item[Knowledge base] The approved university documents and allowlisted webpages that FYNDR AI answers from.
+    \item[LLM] Large language model, an AI model that generates text.
     \item[SRS] Software Requirements Specification.
     \item[TBD] To Be Determined.
+    \item[TLS] Transport Layer Security, protocol for encrypted network connections.
+    \item[WCAG] Web Content Accessibility Guidelines.
 \end{description}
+
 
 \section{Analysis Models}
 \guidance{Include any pertinent analysis models, such as use-case diagrams, data flow diagrams, class diagrams, or entity-relationship diagrams.}
@@ -469,8 +1141,15 @@ The chatbot shall never use websites that are not on the approved allowlist (\re
 \section{To Be Determined List}
 \guidance{Collect a numbered list of the TBD references that remain in the SRS so they can be tracked to closure.}
 \begin{enumerate}
-    \item \textbf{TBD-01:} Clarify with customer team whether offline caching is required for mobile devices (refers to Section 2.4).
+    \item \textbf{TBD-01:} Does InterNex implement the escalation route and the knowledge administration completely in Part II or as a simplified version? The inception document calls both a concept (Section 1.4).
+    \item \textbf{TBD-02:} Do students log in with a university account or use FYNDR AI anonymously? (Sections 2.3 and 2.7)
+    \item \textbf{TBD-03:} Which languages are supported besides German and English? (\reqref{NFR-QA-002})
+    \item \textbf{TBD-04:} Where does FYNDR AI run (cloud or university hardware), which language model is used and who pays the running costs? (Sections 2.4, 2.5 and 2.7)
+    \item \textbf{TBD-05:} Which offices act as university staff and as knowledge administrators, e.g.\ the International Office? (Section 2.3)
+    \item \textbf{TBD-06:} Does FYNDR AI cover DHBW Ravensburg only or further DHBW locations? (Section 2.3)
+    \item \textbf{TBD-07:} Where is the chatbot embedded, on the university homepage, in Moodle or both? (Section 2.1)
 \end{enumerate}
+
 
 \end{document}
 ```
