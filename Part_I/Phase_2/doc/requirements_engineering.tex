@@ -370,24 +370,77 @@ This feature allows DHBW students and lecturers to securely log into the platfor
 \section{Other Nonfunctional Requirements}
 % ------------------------------------------------------------------------------
 
+This section specifies the quality attributes, constraints and rules that \textbf{FYNDR AI} shall fulfill in addition to the functional requirements.
+
 \subsection{Performance Requirements}
-\req{NFR-01}{Page Load Response Time}{Medium}{
-    95\% of all user interactions and page requests shall complete within 1.5 seconds under a simulated load of 100 concurrent campus users.
+
+\req{NFR-PERF-001}{Chatbot Response Time}{High}{
+The chatbot shall display a generated answer within 5 seconds for 90\% of all student questions, measured from sending the question in \reqref{EXT-UI-001}.
+}
+
+\req{NFR-PERF-002}{Chat Widget Loading Time}{Medium}{
+The embedded chat widget (\reqref{EXT-UI-001}) shall open within 2 seconds and shall not noticeably slow down the loading of the university website (\reqref{EXT-SW-001}).
+}
+
+\req{NFR-PERF-003}{Concurrent Users}{Medium}{
+The system shall support at least 100 students chatting at the same time without exceeding the response time defined in \reqref{NFR-PERF-001}.
 }
 
 \subsection{Safety Requirements}
-\guidance{Specify those requirements that are concerned with possible loss, damage, or harm that could result from the use of the product.}
+
+\req{NFR-SAFE-001}{No Binding Official Decisions}{High}{
+The chatbot shall not give binding legal, medical or official decisions. For such questions it shall point to the responsible university office and offer the escalation option (\reqref{EXT-UI-006}).
+}
+
+\req{NFR-SAFE-002}{Answers Only From Approved Sources}{High}{
+The chatbot shall only answer based on approved sources (\reqref{EXT-SW-002}, \reqref{EXT-SW-003}). If no fitting source is found, it shall tell the student that it does not know the answer instead of guessing (\reqref{EXT-SW-005}).
+}
 
 \subsection{Security Requirements}
-\req{NFR-02}{Transport Encryption}{High}{
-    All network communication between client browsers and the backend server shall be encrypted using TLS 1.3 or higher.
+
+\req{NFR-SEC-001}{Encrypted Communication}{High}{
+All communication between browsers and the backend shall be encrypted using TLS 1.3 or higher, as required by \reqref{EXT-COM-001}.
+}
+
+\req{NFR-SEC-002}{Restricted Staff and Admin Access}{High}{
+Only authorized university staff shall be able to access the escalation management (\reqref{EXT-UI-007}) and the knowledge base administration (\reqref{EXT-UI-008}), using the university login (\reqref{EXT-SW-006}).
+}
+
+\req{NFR-SEC-003}{Data Protection (GDPR)}{High}{
+The system shall follow the GDPR. Chat conversations shall only be stored as long as needed and shall be deleted automatically after 30 days. Students shall be informed about this before their first question.
 }
 
 \subsection{Software Quality Attributes}
-\guidance{Specify additional quality characteristics such as adaptability, availability, maintainability, reliability, and usability.}
+
+\req{NFR-QA-001}{Usability}{High}{
+A new student shall be able to ask a question and understand the answer without any instructions or training.
+}
+
+\req{NFR-QA-002}{Supported Languages}{High}{
+The system shall support at least German and English for the interface and the answers (\reqref{EXT-UI-003}).
+}
+
+\req{NFR-QA-003}{Availability}{Medium}{
+The chatbot shall be available at least 99\% of the time during the lecture period, excluding planned maintenance.
+}
+
+\req{NFR-QA-004}{Maintainability of Knowledge Sources}{Medium}{
+Knowledge administrators shall be able to add, update or remove a source in the administration interface (\reqref{EXT-UI-008}) without help from developers. Changes shall be used by the chatbot within 24 hours.
+}
 
 \subsection{Business Rules}
-\guidance{List any operating principles about the product, such as which individuals or roles can perform which functions under specific circumstances.}
+
+\req{NFR-BR-001}{Source Management Rights}{High}{
+Only knowledge administrators shall be allowed to add, change or remove approved documents and external websites (\reqref{EXT-UI-008}).
+}
+
+\req{NFR-BR-002}{Escalation Handling Rights}{High}{
+Only authorized university staff shall be allowed to view and answer escalated questions (\reqref{EXT-UI-007}).
+}
+
+\req{NFR-BR-003}{No Unrestricted Internet Search}{High}{
+The chatbot shall never use websites that are not on the approved allowlist (\reqref{EXT-COM-003}).
+}
 
 % ------------------------------------------------------------------------------
 \section{Other Requirements}
